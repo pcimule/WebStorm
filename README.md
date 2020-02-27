@@ -7,7 +7,9 @@ Muhammad Hassaan Osmani
 <!-- toc -->
 
 - [Getting Started](#getting-started)
-- [Component Creation](#component-creation)
+- [React Component](#react-component)
+- [The Component Lifecycle](#the-component-lifecycle)
+- [User-defined Components](#user-defined-components)
 - [JSON](#JSON)
   * [JSON in Objects of Arrays](#objects-of-arrays)
   * [JSON in Arrays of Objects](#json-in-arrays-of-objects)
@@ -27,7 +29,26 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 Clone the folder or download. Open Project folder and Navigate in Windows and type **code .**
 Open Terminal and type npm start
 
-## Component Creation
+## React Component
+
+React lets you define components as classes or functions. Components defined as classes currently provide more features which are described in detail on this page. To define a React component class, you need to extend React.Component:
+
+```
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+```
+
+The only method you must define in a React.Component subclass is called render(). All the other methods described on this page are optional.
+
+### The Component Lifecycle
+
+Each component has several "lifecycle methods" that you can override to run code at particular times in the process.
+
+
+### User-defined Components
 
 There are two defined components named Photos and RandomPhotos
 * In component Photos, we fetched information from **Data** directory, file named **photos_data**.
