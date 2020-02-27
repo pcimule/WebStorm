@@ -1,4 +1,141 @@
+## Documentation By:
+
+Muhammad Hassaan Osmani
+
+## Table of contents
+
+<!-- toc -->
+
+- [Getting Started](#getting-started)
+- [Component Creation](#component-creation)
+- [JSON](#JSON)
+  * [JSON in Objects of Arrays](#objects-of-arrays)
+  * [JSON in Arrays of Objects](#json-in-arrays-of-objects)
+  * [npm install](#npm-install)
+  * [npm start](#npm-start)
+  * [npm test](#npm-test)
+  * [npm run build](#npm-run-build)
+  * [npm run eject](#npm-run-eject)
+  * [Create React App documentation](#create-react-app-documentation)
+
+<!-- tocstop -->
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Getting Started
+
+Clone the folder or download. Open Project folder and Navigate in Windows and type **code .**
+Open Terminal and type npm start
+
+## Component Creation
+
+There are two defined components named Photos and RandomPhotos
+* In component Photos, we fetched information from **Data** directory, file named **photos_data**.
+* In component RandomPhotos, the data is fetched using API's and there used **componentDidMount()** method where we used to set our states, if we used to set our state in **render()** method the application will be crashed.
+
+### JSON in Objects of Arrays
+
+```
+state = {
+    loading: true,
+    person: null
+};
+
+async componentDidMount() {
+    const url = "https://api.randomuser.me/";
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    this.setState({ person: data.results[0], loading: false });
+}
+
+render() {
+    if (this.state.loading) {
+        return <div>loading...</div>;
+    }
+
+    if (!this.state.person) {
+        return <div>didn't get a person</div>;
+    }
+
+    return (
+
+        <div key={this.state.person.id.value} >
+            <div>{this.state.person.name.title}</div>
+            <div>{this.state.person.name.first} {this.state.person.name.last}</div>
+            <img src={this.state.person.picture.large} alt="" />
+        </div>
+    
+    );
+}
+
+```
+
+### JSON
+
+JSON: JavaScript Object Notation.
+JSON is a syntax for storing and exchanging data.
+JSON is text, written with JavaScript object notation.
+
+**Sending Data**
+If you have data stored in a JavaScript object, you can convert the object into JSON, and send it to a server:
+
+```
+var myObj = {name: "John", age: 31, city: "New York"};
+var myJSON = JSON.stringify(myObj);
+window.location = "demo_json.php?x=" + myJSON;
+```
+
+**Receiving Data**
+If you receive data in JSON format, you can convert it into a JavaScript object:
+
+```
+var myJSON = '{"name":"John", "age":31, "city":"New York"}';
+var myObj = JSON.parse(myJSON);
+document.getElementById("demo").innerHTML = myObj.name;
+```
+
+### JSON in Arrays of Objects
+
+```
+state = {
+    loading: true,
+    person: null
+};
+
+async componentDidMount() {
+
+    const url = "https://jsonplaceholder.typicode.com/photos/";
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data);
+    this.setState({ person: data, loading: false });
+}
+
+render() {
+    if (this.state.loading) {
+        return <div>loading...</div>;
+    }
+
+    if (!this.state.person) {
+        return <div>didn't get a person</div>;
+    }
+
+    return (
+
+        <div className="photos_list">
+            {this.state.person.map(new_data => (
+                <section key={new_data.id}>
+                    <h4>{new_data.title}</h4>
+                    <a href={new_data.url}><img src={new_data.thumbnailUrl} alt="" /></a>
+                </section>
+            ))}
+        </div>
+
+    );
+}
+
+```
 
 ## Available Scripts
 
