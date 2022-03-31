@@ -76,6 +76,18 @@ export default function App(props) {
                 console.log("Delete all previous data -> ", getDeleteData);
                 console.log("Run all endpoints -> ", getRunAll);
 
+                let jsonData = {
+                    "PROCESS": getSelectedOption,
+                    "QUICK_MODE": getQuickMode,
+                    "INSTANCE_TYPE": getInstanceType,
+                    "DELETE_DATA": getDeleteData,
+                    "RUN_ALL": getRunAll
+                }
+
+                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                        console.log(response.data)
+                    })
+
             } else if (getSelectedOption === "migration") {
                 console.log("Selected Instance -> ", getSelectedInstance);
                 console.log("Thread -> ", getThreat);
@@ -83,6 +95,20 @@ export default function App(props) {
                 console.log("Update User -> ", getUpdateUser);
                 console.log("Detect Collisions -> ", getDetectCollision);
                 console.log("Repopulate AWS -> ", getRepopulateAWS);
+
+                let jsonData = {
+                    "PROCESS": getSelectedOption,
+                    "SELECTED_INSTANCE": getSelectedInstance,
+                    "THREAD": getThreat,
+                    "TEST_MODE": testModeChecked.current.checked,
+                    "UPDATE_USER": getUpdateUser,
+                    "DETECT_COLLISION": getDetectCollision,
+                    "REPOPULATE_AWS": getRepopulateAWS
+                }
+
+                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                    console.log(response.data)
+                })
 
             } else if (getSelectedOption === "teamMigration") {
                 console.log("Quick Mode -> ", getQuickMode);
@@ -92,6 +118,21 @@ export default function App(props) {
                 console.log("Update User -> ", getUpdateUser);
                 console.log("Detect Collisions -> ", getDetectCollision);
                 console.log("Repopulate AWS -> ", getRepopulateAWS);
+
+                let jsonData = {
+                    "PROCESS": getSelectedOption,
+                    "QUICK_MODE": getQuickMode,
+                    "SELECTED_INSTANCE": getSelectedInstance,
+                    "THREAD": getThreat,
+                    "TEST_MODE": testModeChecked.current.checked,
+                    "UPDATE_USER": getUpdateUser,
+                    "DETECT_COLLISION": getDetectCollision,
+                    "REPOPULATE_AWS": getRepopulateAWS
+                }
+
+                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                    console.log(response.data)
+                })
 
             }
         }
@@ -118,36 +159,42 @@ export default function App(props) {
                 targetUrl: response.data['TARGET']['END_POINT_2'],
             });
             console.log(response.data);
+            alert("Settings.json file was read")
         })
     };
 
 
     function updateSettings(event) {
+        let proceed = window.confirm('Are you sure you wish update the seeting.json file?')
+        if (proceed) {
+            let jsonData = {
+                "API_KEY_1": textSourceApiKey.current.value,
+                "EMAIL_1": textSourceEmail.current.value,
+                "END_POINT_1": textSourceUrl.current.value,
+                "API_KEY_2": textTargetApiKey.current.value,
+                "EMAIL_2": textTargetEmail.current.value,
+                "END_POINT_2": textTargetUrl.current.value
+            };
 
-        let jsonData = {
-            "API_KEY_1": textSourceApiKey.current.value,
-            "EMAIL_1": textSourceEmail.current.value,
-            "END_POINT_1": textSourceUrl.current.value,
-            "API_KEY_2": textTargetApiKey.current.value,
-            "EMAIL_2": textTargetEmail.current.value,
-            "END_POINT_2": textTargetUrl.current.value
-        };
+            console.log(jsonData);
 
-        console.log(jsonData);
-
-        apiClient.put('/updateSettings', jsonData).then((response) => {
-            setSettings({
-                sourceName: response.data["SOURCE"]["NAME"],
-                sourceApiKey: response.data['SOURCE']['API_KEY_1'],
-                sourceEmail: response.data['SOURCE']['EMAIL_1'],
-                sourceUrl: response.data['SOURCE']['END_POINT_1'],
-                targetName: response.data["TARGET"]["NAME"],
-                targetApiKey: response.data['TARGET']['API_KEY_2'],
-                targetEmail: response.data['TARGET']['EMAIL_2'],
-                targetUrl: response.data['TARGET']['END_POINT_2']
-            });
-            console.log(response.data);
-        })
+            apiClient.put('/updateSettings', jsonData).then((response) => {
+                setSettings({
+                    sourceName: response.data["SOURCE"]["NAME"],
+                    sourceApiKey: response.data['SOURCE']['API_KEY_1'],
+                    sourceEmail: response.data['SOURCE']['EMAIL_1'],
+                    sourceUrl: response.data['SOURCE']['END_POINT_1'],
+                    targetName: response.data["TARGET"]["NAME"],
+                    targetApiKey: response.data['TARGET']['API_KEY_2'],
+                    targetEmail: response.data['TARGET']['EMAIL_2'],
+                    targetUrl: response.data['TARGET']['END_POINT_2']
+                });
+                console.log(response.data);
+                alert("Settings.json file updated")
+            })
+        } else {
+            console.log("Process Canceled")
+        }
     };
 
     function renderOptions() {
