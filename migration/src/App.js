@@ -85,6 +85,12 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                        if (response.status === 200) {
+                            alert("Code " + response.status + ": Migration Script created.")
+                        }
+                        else {
+                            alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
+                        }
                         console.log(response.data)
                     })
 
@@ -107,6 +113,12 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                    if (response.status === 200) {
+                        alert("Code " + response.status + ": Migration Script created.")
+                    }
+                    else {
+                        alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
+                    }
                     console.log(response.data)
                 })
 
@@ -131,6 +143,12 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                    if (response.status === 200) {
+                        alert("Code " + response.status + ": Migration Script created.")
+                    }
+                    else {
+                        alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
+                    }
                     console.log(response.data)
                 })
 
