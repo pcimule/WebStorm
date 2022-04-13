@@ -167,17 +167,17 @@ export default function App(props) {
         document.getElementById("settings").reset();
         apiClient.get('/readSettings').then((response) => {
             setSettings({
-                sourceName: response.data["SOURCE"]["NAME"],
-                sourceApiKey: response.data['SOURCE']['API_KEY_1'],
-                sourceEmail: response.data['SOURCE']['EMAIL_1'],
-                sourceUrl: response.data['SOURCE']['END_POINT_1'],
-                targetName: response.data["TARGET"]["NAME"],
-                targetApiKey: response.data['TARGET']['API_KEY_2'],
-                targetEmail: response.data['TARGET']['EMAIL_2'],
-                targetUrl: response.data['TARGET']['END_POINT_2'],
+                sourceName: response.data["SOURCE_I"]["NAME"],
+                sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
+                sourceEmail: response.data['SOURCE_I']['EMAIL_1'],
+                sourceUrl: response.data['SOURCE_I']['END_POINT_1'],
+                targetName: response.data["TARGET_I"]["NAME"],
+                targetApiKey: response.data['TARGET_I']['API_KEY_2'],
+                targetEmail: response.data['TARGET_I']['EMAIL_2'],
+                targetUrl: response.data['TARGET_I']['END_POINT_2'],
             });
             console.log(response.data);
-            alert("Settings.json file was read")
+            alert("AWS dynamoDB: settings table was read")
         })
     };
 
@@ -198,21 +198,34 @@ export default function App(props) {
 
             apiClient.put('/updateSettings', jsonData).then((response) => {
                 setSettings({
-                    sourceName: response.data["SOURCE"]["NAME"],
-                    sourceApiKey: response.data['SOURCE']['API_KEY_1'],
-                    sourceEmail: response.data['SOURCE']['EMAIL_1'],
-                    sourceUrl: response.data['SOURCE']['END_POINT_1'],
-                    targetName: response.data["TARGET"]["NAME"],
-                    targetApiKey: response.data['TARGET']['API_KEY_2'],
-                    targetEmail: response.data['TARGET']['EMAIL_2'],
-                    targetUrl: response.data['TARGET']['END_POINT_2']
+                    sourceName: response.data["SOURCE_I"]["NAME"],
+                    sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
+                    sourceEmail: response.data['SOURCE_I']['EMAIL_1'],
+                    sourceUrl: response.data['SOURCE_I']['END_POINT_1'],
+                    targetName: response.data["TARGET_I"]["NAME"],
+                    targetApiKey: response.data['TARGET_I']['API_KEY_2'],
+                    targetEmail: response.data['TARGET_I']['EMAIL_2'],
+                    targetUrl: response.data['TARGET_I']['END_POINT_2']
                 });
                 console.log(response.data);
-                alert("Settings.json file updated")
+                alert("AWS dynamoDB: settings table updated")
             })
         } else {
             console.log("Process Canceled")
         }
+        document.getElementById("settings").reset();
+        apiClient.get('/readSettings').then((response) => {
+            setSettings({
+                sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
+                sourceEmail: response.data['SOURCE_I']['EMAIL_1'],
+                sourceUrl: response.data['SOURCE_I']['END_POINT_1'],
+                targetName: response.data["TARGET_I"]["NAME"],
+                targetApiKey: response.data['TARGET_I']['API_KEY_2'],
+                targetEmail: response.data['TARGET_I']['EMAIL_2'],
+                targetUrl: response.data['TARGET_I']['END_POINT_2']
+            });
+            console.log(response.data);
+        })
     };
 
     function renderOptions() {
@@ -368,7 +381,7 @@ export default function App(props) {
                                     </tr>
                                     <tr>
                                         <td width="40%"><input ref={textSourceApiKey} placeholder='Source API Key' required={true}  defaultValue={getSettings.sourceApiKey} name="sourceApiKey" onChange={event => setSourceApiKey(event.target.value)}/></td>
-                                        <td width="40%"><input ref={textTargetApiKey} placeholder='Target API Key' defaultValue={getSettings.targetApiKey} name="targetApiKey" onChange={event => setTargetApiKey(event.target.value)}/></td>
+                                        <td width="40%"><input ref={textTargetApiKey} placeholder='Target API Key' required={true}  defaultValue={getSettings.targetApiKey} name="targetApiKey" onChange={event => setTargetApiKey(event.target.value)}/></td>
                                         <td width="20%"><button_green type="submit" id="updateSettings" onClick={updateSettings}>Update Settings File</button_green></td>
                                     </tr>
                                     <tr>
