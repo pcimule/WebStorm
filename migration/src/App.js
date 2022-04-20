@@ -85,14 +85,12 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
-                        if (response.status === 200) {
-                            alert("Code " + response.status + ": Migration Script created.")
-                        }
-                        else {
-                            alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
-                        }
-                        console.log(response.data)
-                    })
+                    alert("Code " + response.status + ": Populate GraphDB Script created.")
+                    console.log(response.data)
+                }).catch((error) => {
+                    alert(error.response.data['error'])
+                    console.log(error.response.data['error'])
+                })
 
             } else if (getSelectedOption === "migration") {
                 console.log("Selected Instance -> ", getSelectedInstance);
@@ -113,13 +111,11 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
-                    if (response.status === 200) {
-                        alert("Code " + response.status + ": Migration Script created.")
-                    }
-                    else {
-                        alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
-                    }
+                    alert("Code " + response.status + ": Complete Migration Script created.")
                     console.log(response.data)
+                }).catch((error) => {
+                    alert(error.response.data['error'])
+                    console.log(error.response.data['error'])
                 })
 
             } else if (getSelectedOption === "teamMigration") {
@@ -143,15 +139,12 @@ export default function App(props) {
                 }
 
                 apiClient.post('/generateMigrationScript', jsonData).then((response) => {
-                    if (response.status === 200) {
-                        alert("Code " + response.status + ": Migration Script created.")
-                    }
-                    else {
-                        alert("Error Code " + response.status + ": An error occurred while trying to create the migration script.")
-                    }
+                    alert("Code " + response.status + ": Team-Based Migration Script created.")
                     console.log(response.data)
+                }).catch((error) => {
+                    alert(error.response.data['error'])
+                    console.log(error.response.data['error'])
                 })
-
             }
         }
     }
@@ -166,24 +159,40 @@ export default function App(props) {
     function readSettings() {
         document.getElementById("settings").reset();
         apiClient.get('/readSettings').then((response) => {
+            if (response.status === 200) {
+                setSettings({
+                    sourceName: response.data["SOURCE_I"]["NAME"],
+                    sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
+                    sourceEmail: response.data['SOURCE_I']['EMAIL_1'],
+                    sourceUrl: response.data['SOURCE_I']['END_POINT_1'],
+                    targetName: response.data["TARGET_I"]["NAME"],
+                    targetApiKey: response.data['TARGET_I']['API_KEY_2'],
+                    targetEmail: response.data['TARGET_I']['EMAIL_2'],
+                    targetUrl: response.data['TARGET_I']['END_POINT_2'],
+                });
+                console.log(response.data);
+                alert("AWS dynamoDB: settings table was read")
+            }
+        }).catch((error) => {
+            // handle error
+            alert(error.response.data['error'])
+            console.log(error.response.data['error']);
             setSettings({
-                sourceName: response.data["SOURCE_I"]["NAME"],
-                sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
-                sourceEmail: response.data['SOURCE_I']['EMAIL_1'],
-                sourceUrl: response.data['SOURCE_I']['END_POINT_1'],
-                targetName: response.data["TARGET_I"]["NAME"],
-                targetApiKey: response.data['TARGET_I']['API_KEY_2'],
-                targetEmail: response.data['TARGET_I']['EMAIL_2'],
-                targetUrl: response.data['TARGET_I']['END_POINT_2'],
+                sourceName: '',
+                sourceApiKey: '',
+                sourceEmail: '',
+                sourceUrl: '',
+                targetName: '',
+                targetApiKey: '',
+                targetEmail: '',
+                targetUrl: '',
             });
-            console.log(response.data);
-            alert("AWS dynamoDB: settings table was read")
         })
     };
 
 
     function updateSettings(event) {
-        let proceed = window.confirm('Are you sure you wish update the seeting.json file?')
+        let proceed = window.confirm('Are you sure you wish update the setting.json file?')
         if (proceed) {
             let jsonData = {
                 "API_KEY_1": textSourceApiKey.current.value,

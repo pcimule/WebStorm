@@ -2,22 +2,50 @@
 import React, {Component} from 'react'
 import moment from "moment";
 import './Title.css';
-
+import apiClient from "./http-common";
 
 const PagerDutyLogo = require('./images/PagerDutyLogo.jpg');
 
 function getConsultant() {
-    return "Replace Name with login data"; /* To be replaced by consultant data */
+    return {name: 'Consultant Name From API', email: 'pcimule@pagerduty.com'}; /* To be replaced by consultant data */
 }
 
+let textSelectedProject = React.createRef();
+let DynamoDB_endpoint = ""
 
 class Title extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            consultantName: getConsultant(),
-            startDate: moment().format("MM-DD-YYYY - hh:mm")
-        }
+            consultantName: getConsultant().name,
+            startDate: moment().format("MM-DD-YYYY - hh:mm"),
+            projectList: [],
+            selectedProject: ''
+        };
+        this.handleChangeProjects = this.handleChangeProjects.bind(this);
+
+    }
+
+    componentDidMount() {
+        apiClient.get('/getProjectList', { params: { email: getConsultant().email }}).then(response => {
+                const projectList  = response.data;
+                this.setState({ projectList });
+                console.log(projectList)
+                this.setState({ DynamoDB_endpoint: projectList[0]});
+                console.log(this.state.DynamoDB_endpoint)
+                apiClient.post('/setProjectDynamoDbUrl', {"url": projectList[0].dynamoDBurl}).then(response => {
+                    console.log("Datos en la API", response.data)
+                })
+            })
+    }
+
+    handleChangeProjects(event) {
+        this.setState({ selectedProject: textSelectedProject.current.value });
+        console.log(textSelectedProject.current.value)
+        const projectIndex = this.state.projectList.findIndex(obj => obj.value === textSelectedProject.current.value);
+        apiClient.post('/setProjectDynamoDbUrl', {"url": this.state.projectList[projectIndex].dynamoDBurl}).then(response => {
+            console.log("Datos en la API despues de Actualizar", response.data)
+        })
     }
 
     render() {
@@ -49,6 +77,14 @@ class Title extends Component {
                             </td>
                             <td width="5%"> </td>
                         </tr>
+                        <td width="60%">
+                            <div className='group'>
+                                <label>Projects: </label>
+                                <select ref={textSelectedProject} value={this.state.selectedProject} onChange={this.handleChangeProjects}>
+                                    {this.state.projectList.map(option => <option value={option.value}>{option.value}</option>)}
+                                </select>
+                            </div>
+                        </td>
                     </table>
 
                 </td>
