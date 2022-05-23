@@ -84,7 +84,7 @@ export default function App(props) {
                     "RUN_ALL": getRunAll
                 }
 
-                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                apiClient.post('/generateMigrationScriptFile', jsonData).then((response) => {
                     alert("Code " + response.status + ": Populate GraphDB Script created.")
                     console.log(response.data)
                 }).catch((error) => {
@@ -110,7 +110,7 @@ export default function App(props) {
                     "REPOPULATE_AWS": getRepopulateAWS
                 }
 
-                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                apiClient.post('/generateMigrationScriptFile', jsonData).then((response) => {
                     alert("Code " + response.status + ": Complete Migration Script created.")
                     console.log(response.data)
                 }).catch((error) => {
@@ -138,7 +138,7 @@ export default function App(props) {
                     "REPOPULATE_AWS": getRepopulateAWS
                 }
 
-                apiClient.post('/generateMigrationScript', jsonData).then((response) => {
+                apiClient.post('/generateMigrationScriptFile', jsonData).then((response) => {
                     alert("Code " + response.status + ": Team-Based Migration Script created.")
                     console.log(response.data)
                 }).catch((error) => {
@@ -158,7 +158,7 @@ export default function App(props) {
 
     function readSettings() {
         document.getElementById("settings").reset();
-        apiClient.get('/readSettings').then((response) => {
+        apiClient.get('/readSettingsFile').then((response) => {
             if (response.status === 200) {
                 setSettings({
                     sourceName: response.data["SOURCE_I"]["NAME"],
@@ -205,7 +205,7 @@ export default function App(props) {
 
             console.log(jsonData);
 
-            apiClient.put('/updateSettings', jsonData).then((response) => {
+            apiClient.put('/updateSettingsFile', jsonData).then((response) => {
                 setSettings({
                     sourceName: response.data["SOURCE_I"]["NAME"],
                     sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
@@ -223,7 +223,7 @@ export default function App(props) {
             console.log("Process Canceled")
         }
         document.getElementById("settings").reset();
-        apiClient.get('/readSettings').then((response) => {
+        apiClient.get('/readSettingsFile').then((response) => {
             setSettings({
                 sourceApiKey: response.data['SOURCE_I']['API_KEY_1'],
                 sourceEmail: response.data['SOURCE_I']['EMAIL_1'],

@@ -27,7 +27,8 @@ class Title extends Component {
     }
 
     componentDidMount() {
-        apiClient.get('/getProjectList', { params: { email: getConsultant().email }}).then(response => {
+        console.log(getConsultant().email)
+        apiClient.post('/getProjectList', { "email": getConsultant().email }).then(response => {
                 const projectList  = response.data;
                 this.setState({ projectList });
                 console.log(projectList)
@@ -44,7 +45,7 @@ class Title extends Component {
         console.log(textSelectedProject.current.value)
         const projectIndex = this.state.projectList.findIndex(obj => obj.value === textSelectedProject.current.value);
         apiClient.post('/setProjectDynamoDbUrl', {"url": this.state.projectList[projectIndex].dynamoDBurl}).then(response => {
-            console.log("Datos en la API despues de Actualizar", response.data)
+            console.log(response.data)
         })
     }
 
