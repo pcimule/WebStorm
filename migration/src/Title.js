@@ -11,7 +11,7 @@ function getConsultant() {
 }
 
 let textSelectedProject = React.createRef();
-let DynamoDB_endpoint = ""
+let Ec2_endpoint = ""
 
 class Title extends Component {
     constructor(props) {
@@ -32,9 +32,9 @@ class Title extends Component {
                 const projectList  = response.data;
                 this.setState({ projectList });
                 console.log(projectList)
-                this.setState({ DynamoDB_endpoint: projectList[0]});
-                console.log(this.state.DynamoDB_endpoint)
-                apiClient.post('/setProjectDynamoDbUrl', {"url": projectList[0].dynamoDBurl}).then(response => {
+                this.setState({ Ec2_endpoint: projectList[0]});
+                console.log(this.state.Ec2_endpoint)
+                apiClient.post('/setProjectEc2bUrl', {"url": projectList[0].Ec2url}).then(response => {
                     console.log("Datos en la API", response.data)
                 })
             })
@@ -44,7 +44,7 @@ class Title extends Component {
         this.setState({ selectedProject: textSelectedProject.current.value });
         console.log(textSelectedProject.current.value)
         const projectIndex = this.state.projectList.findIndex(obj => obj.value === textSelectedProject.current.value);
-        apiClient.post('/setProjectDynamoDbUrl', {"url": this.state.projectList[projectIndex].dynamoDBurl}).then(response => {
+        apiClient.post('/setProjectEc2bUrl', {"url": this.state.projectList[projectIndex].Ec2url}).then(response => {
             console.log(response.data)
         })
     }
